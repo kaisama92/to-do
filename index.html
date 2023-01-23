@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+  <script src="js/scripts.js"></script>
+  <link href="css/styles.css" rel="stylesheet" type="text/css">
+  <title>To-do list</title>
+</head>
+<body>
+  <h1>To-do list</h1>
+  <h2>Add a task:</h2>
+  <form id = "new-task">
+    <label for="new-task-name">Task Name</label>
+    <input type="text" id="new-task-name" name="new-task-name">
+    <label for="new-steps">Steps</label>
+    <input type="text" id="new-steps" name="new-steps">
+    <label for="new-date">Deadline</label>
+    <input type="date" id="new-date" name="new-date">
+    <button type="submit">Add</button>
+  </form>
+  <br>
+  <br>
+
+    <h2>To-do List</h2>
+    <div id="tasks">
+    </div>
+
+    <div id="tasks-details" class="hidden">
+      <h2>Task Details:</h2>
+      <p>Task Name: <span class="task-name"></span></p>
+      <p>Steps: <span class="steps"></span></p>
+      <p>Deadline: <span class="date"></span></p>
+      <button class="btn-primary delete" type="button">Delete</button>
+      <button class="btn-primary cross" type="button">Mark as done</button>
+
+    </div>
+</body>
+</html>
