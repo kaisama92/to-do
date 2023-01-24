@@ -6,7 +6,7 @@ function TaskList() {
 
 TaskList.prototype.addTask = function(task) {
   task.id = this.assignId();
-  this.task[task.id] = task;
+  this.tasks[task.id] = task;
 };
 
 TaskList.prototype.assignId = function() {
@@ -15,19 +15,33 @@ TaskList.prototype.assignId = function() {
 };
 
 TaskList.prototype.findTask = function(id) {
-  if (this.task[id] !== undefined) {
-    return this.task[id];
+  if (this.tasks[id] !== undefined) {
+    return this.tasks[id];
   }
   return false;
 };
 
 TaskList.prototype.deleteTask = function(id) {
-  if (this.task[id] === undefined) {
+  console.log(this.tasks[id]);
+  if (this.tasks[id] === undefined) {
     return false;
   }
-  delete this.task[id];
+  delete this.tasks[id];
   return true;
 };
+
+TaskList.prototype.updateTask = function(id) {
+  //const task = taskList.findTask(event.target.id);
+  console.log(this.tasks[id]);
+  if (this.tasks[id] === undefined) {
+    return false;
+  }
+  console.log(this.tasks.taskName);
+  this.tasks.taskName = this.tasks.taskName + ": Is Done"
+  return true;
+};
+
+
 
 
 
@@ -51,14 +65,38 @@ function listTask(taskListToDisplay) {
   tasksDiv.innerText =  null;
   const ul = document.createElement("ul");
   Object.keys(taskListToDisplay.tasks).forEach(function(key) {
-    const task = taskListToDisplay.findContact(key);
+    const task = taskListToDisplay.findTask(key);
     const li = document.createElement("li");
-    li.append(contact.whatWhen());
+    li.append(task.whatWhen());
     li.setAttribute("id", task.id);
     ul.append(li);
   });
   tasksDiv.append(ul);
 }
+
+function displayTaskDetails(event) {
+  const task = taskList.findTask(event.target.id);
+  document.querySelector(".task-name").innerText = task.taskName;
+  document.querySelector(".steps").innerText = task.steps;
+  document.querySelector(".date").innerText = task.doneBy;
+  document.querySelector("button.delete").setAttribute("id", task.id);
+  document.querySelector("div#tasks-details").removeAttribute("class");
+}
+
+function handleDelete(event) {
+  taskList.deleteTask(event.target.id);
+  document.querySelector("button.delete").removeAttribute("id");
+  document.querySelector("div#tasks-details").setAttribute("class", "hidden");
+  listTask(taskList);
+}
+
+function handleUpdate(event) {
+  taskList.updateTask(event.target.id);
+  document.querySelector("button.cross").removeAttribute("id");
+  document.querySelector("div#tasks-details").setAttribute("class", "hidden");
+  listTask(taskList);
+}
+
 
 function handleFormSubmission(event) {
   event.preventDefault();
@@ -66,7 +104,8 @@ function handleFormSubmission(event) {
   const inputtedSteps = document.querySelector("input#new-steps").value.split(",");
   const inputtedDeadline = document.querySelector("input#new-date").value;
   let newTask = new Task(inputtedTaskName, inputtedSteps, inputtedDeadline);
-  TaskList.addTask(newTask);
+  taskList.addTask(newTask);
+  listTask(taskList);
   document.querySelector("input#new-task-name").value = null;
   document.querySelector("input#new-steps").value = null;
   document.querySelector("input#new-date").value = null;
@@ -76,5 +115,5 @@ window.addEventListener("load", function () {
   this.document.querySelector("form#new-task").addEventListener("submit", handleFormSubmission);
   document.querySelector("div#tasks").addEventListener("click", displayTaskDetails);
   document.querySelector("button.delete").addEventListener("click", handleDelete);
-  document.querySelector("button.cross").addEventListener("click", handleCrossOut);
-})
+  document.querySelector("button.cross").addEventListener("click", handleUpdate);
+});
